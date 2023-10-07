@@ -2,34 +2,31 @@
 
 import React from 'react'
 
+type ThemeMode = 'light' | 'dark' | 'system'
+
 type ThemeContextType = {
-    mode: string
-    setMode: (mode: string) => void
+    mode: ThemeMode
+    setMode: (mode: ThemeMode) => void
 }
 
 const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined)
 
 const ThemeProvider = ({ children }: React.PropsWithChildren) => {
-    const [mode, setMode] = React.useState('dark')
+    const [mode, setMode] = React.useState<ThemeMode>('system')
 
-    // const handleThemeChange = () => {
-    //     if (mode === 'dark') {
-    //         setMode('light')
-    //         document.documentElement.classList.add('light')
-    //     } else {
-    //         setMode('dark')
-    //         document.documentElement.classList.remove('dark')
-    //     }
-    // }
-
-    // infinite loop fix todo later
-
-    React.useEffect(() => {
-        if (mode === 'dark') {
+    const handleThemeChange = () => {
+        if (localStorage.theme === 'dark' ||
+            (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            setMode('dark')
             document.documentElement.classList.add('dark')
         } else {
-            document.documentElement.classList.remove('light')
+            setMode('light')
+            document.documentElement.classList.remove('dark')
         }
+    }
+
+    React.useEffect(() => {
+        handleThemeChange()
     }, [mode])
 
     const value = {
