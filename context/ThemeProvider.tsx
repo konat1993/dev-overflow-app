@@ -10,21 +10,26 @@ type ThemeContextType = {
 const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined)
 
 const ThemeProvider = ({ children }: React.PropsWithChildren) => {
-    const [mode, setMode] = React.useState('')
+    const [mode, setMode] = React.useState('dark')
 
+    // const handleThemeChange = () => {
+    //     if (mode === 'dark') {
+    //         setMode('light')
+    //         document.documentElement.classList.add('light')
+    //     } else {
+    //         setMode('dark')
+    //         document.documentElement.classList.remove('dark')
+    //     }
+    // }
 
-    const handleThemeChange = () => {
-        if (mode === 'dark') {
-            setMode('dark')
-            document.documentElement.classList.add('dark')
-        } else {
-            setMode('light')
-            document.documentElement.classList.remove('dark')
-        }
-    }
+    // infinite loop fix todo later
 
     React.useEffect(() => {
-        handleThemeChange()
+        if (mode === 'dark') {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('light')
+        }
     }, [mode])
 
     const value = {
